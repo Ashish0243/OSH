@@ -42,12 +42,26 @@ def populate_organizations(year):
             }
         )
         for topic_name in org_data.get('topics', []):
-            topic, _ = Topic.objects.get_or_create(name=topic_name)
-            org.topics.add(topic)
+            # Split comma-separated topics and clean them
+            if isinstance(topic_name, str) and ',' in topic_name:
+                topic_names = [name.strip() for name in topic_name.split(',') if name.strip()]
+                for individual_topic in topic_names:
+                    topic, _ = Topic.objects.get_or_create(name=individual_topic)
+                    org.topics.add(topic)
+            else:
+                topic, _ = Topic.objects.get_or_create(name=topic_name)
+                org.topics.add(topic)
 
         for tech_name in org_data.get('technologies', []):
-            tech, _ = Technology.objects.get_or_create(name=tech_name)
-            org.technologies.add(tech)
+            # Split comma-separated technologies and clean them
+            if isinstance(tech_name, str) and ',' in tech_name:
+                tech_names = [name.strip() for name in tech_name.split(',') if name.strip()]
+                for individual_tech in tech_names:
+                    tech, _ = Technology.objects.get_or_create(name=individual_tech)
+                    org.technologies.add(tech)
+            else:
+                tech, _ = Technology.objects.get_or_create(name=tech_name)
+                org.technologies.add(tech)
         
         projects=org_data.get('projects', [])
         for project_data in projects:
@@ -74,12 +88,26 @@ def populate_organizations(year):
                     }
                 )
                 for topic_name in req_data['topic_tags']:
-                    topic, _ = Topic.objects.get_or_create(name=topic_name)
-                    project.topics.add(topic)
+                    # Split comma-separated topics and clean them
+                    if isinstance(topic_name, str) and ',' in topic_name:
+                        topic_names = [name.strip() for name in topic_name.split(',') if name.strip()]
+                        for individual_topic in topic_names:
+                            topic, _ = Topic.objects.get_or_create(name=individual_topic)
+                            project.topics.add(topic)
+                    else:
+                        topic, _ = Topic.objects.get_or_create(name=topic_name)
+                        project.topics.add(topic)
 
                 for tech_name in req_data['tech_tags']:
-                    tech, _ = Technology.objects.get_or_create(name=tech_name)
-                    project.technologies.add(tech)
+                    # Split comma-separated technologies and clean them
+                    if isinstance(tech_name, str) and ',' in tech_name:
+                        tech_names = [name.strip() for name in tech_name.split(',') if name.strip()]
+                        for individual_tech in tech_names:
+                            tech, _ = Technology.objects.get_or_create(name=individual_tech)
+                            project.technologies.add(tech)
+                    else:
+                        tech, _ = Technology.objects.get_or_create(name=tech_name)
+                        project.technologies.add(tech)
                 
                 for mentor_name in req_data.get('assigned_mentors', []):
                     mentor, _ = Mentor.objects.get_or_create(name=mentor_name)
@@ -89,4 +117,4 @@ def populate_organizations(year):
                 project.program=program
                 project.save()
     print(f"✅ Trial Organizations and Projects and Projects for {year} loaded!")
-populate_organizations(2025)
+populate_organizations(2024)
