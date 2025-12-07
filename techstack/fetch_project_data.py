@@ -4,14 +4,16 @@ import os
 import sys
 import django
 import json
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
+# from langchain_chroma import Chroma
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'OpenSourceMadeEasy.settings')
 django.setup()
 
 from organizations.models import Project
-from langchain.schema import Document
+from langchain_core.documents import Document
 
 def fetch_project_tech_topics():
     projects = Project.objects.prefetch_related('technologies', 'topics').all()
@@ -51,13 +53,18 @@ def fetch_specific_project(project_id):
         return None
 
 
-all_projects = fetch_project_tech_topics()
-print(f"\n📊 Total projects: {len(all_projects)}")
+# all_projects = fetch_project_tech_topics()
+# print(f"\n📊 Total projects: {len(all_projects)}")
 
-all_docs = all_projects
-print(all_docs)
-vectorstore = Chroma.from_documents(
-    all_docs,
-    embedding=HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"),
-    persist_directory="project_vector_store"
+# all_docs = all_projects
+# print(all_docs)
+# vectorstore = Chroma.from_documents(
+#     all_docs,
+#     embedding=HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"),
+#     persist_directory="project_vector_store"
+# )
+
+vector_presist=Chroma(
+    persist_directory="project_vector_store",
+    embedding_function=HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 )
