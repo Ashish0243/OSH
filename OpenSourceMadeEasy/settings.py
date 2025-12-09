@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'users',
     'home',
     'techstack',
-    'organizations'
+    'organizations',
+    'projects'
 ]
 
 MIDDLEWARE = [
