@@ -29,9 +29,11 @@ def fetch_project_tech_topics():
         }
         
         project_tech_topic_data.append(
-            Document( page_content=json.dumpse(project_data), 
-            metadata={"project_id": str(project.id)}
-            ))
+            Document(
+                page_content=json.dumps(project_data), 
+                metadata={"project_id": str(project.id)}
+            )
+        )
     
         
     return project_tech_topic_data
